@@ -1,8 +1,8 @@
-#Advanced Algorithm Design.
+# Advanced Algorithm Design.
 
 
 
-##Simple Firewall.
+## Simple Firewall.
 <center>Saeid Hosseinpoor</center>
 Cyrus
 <center>Dave</center>
@@ -10,13 +10,14 @@ Cyrus
 
 
 
-#<left>1. Data Structure</left>
+# <left> 1. Data Structure</left>
 describe it here
 
-#2. Implementation
+# 2. Implementation
+
 
 
 
 something here
 
-#References
+# References
