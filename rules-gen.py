@@ -7,6 +7,7 @@ class BinaryTree():
         self.left = None
         self.right = None
         self.rootid = rootid
+        self.rules = None
         def getLeftChild(self):
             return self.left
         def getRightChild(self):
@@ -15,6 +16,8 @@ class BinaryTree():
             self.rootid = value
         def getNodeValue(self):
             return self.rootid
+        def getNodeRules(self):
+            return self.rules
 
 
         def insertRight(self,newNode):
@@ -32,6 +35,13 @@ class BinaryTree():
                 tree = BinaryTree(newNode)
                 self.left = tree
                 tree.left = self.left
+                
+        def insertRule(self,newRule):
+            if self.rule == None:
+                self.rule = newRule
+            else:
+                if newRule.priority > self.rule.priority:
+                    self.rule = newRule
 
 
 def printTree(tree):
