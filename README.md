@@ -1,11 +1,11 @@
-# Advanced Algorithm Design.
+# Advanced Algorithm Design
 
 
 
 ## Simple Firewall.
-<center>Saeid Hosseinpoor</center>
-Cyrus
-<center>Dave</center>
+<center>Saeid Hosseinpoor
+Cyrus Liu
+Dave</center>
 
 
 
