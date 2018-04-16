@@ -1,20 +1,17 @@
 # Advanced Algorithm Design
 ## Simple Firewall
 
-<center>Saeid Hosseinpoor, Cyrus Liu, Dave<Center>
+<p style="text-align: center:">Saeid Hosseinpoor, Cyrus Liu, Dave</p>
 
 # Introduction
 
 ## Problem Statement
 
   The objective of this projects is design and implementation of a packet controller within a network traffic according to a set on given rules. The rules are provided in a rule file and specify whether a node and/or a sub network could pass a TCP/UDP request he other node or subnetwork. The rule format is:
-
   <Center>srcIP(s), destIP(s), Act<Center>
   Where srcIP(s) is a single IP or a range of IPs which is sent the request, destIP(s)  is a single IP or a range of IPs which accepts the request, and Act is the action should be applied which is Allow or Block.
   We need to design the algorithm such that be able to check the redundant rules, and for the coming package, our algorithm should check the IP and return the action for the IP pairs according our rules file. Some rules may apply to a pair of source and destination IPs, if they imply the same action, it is safe to pick one of them. The problem rises when we have different action for a single pair of IPs. For this situation, we look at the assigned priority to each rule and pick the most important rule.
-
 # Assumptions
-
   IPs are defined in standard formats of a.b.c.d which a-d are integer numbers between 0 and 255. Range of IPs described in standard form of a.b.c.* or a.b.c.d/e or similar standard forms. There is no guaranty of consistency in rules or avoiding redundancies. Since, we assume rules are added to the list with no consideration, we make another assumption that most recent rules have higher priority to apply. For sake of clarity, we assume that new rules added to the end of the available rule file. The rules on the top of the file, are older than rules in the bottom of the file.
   A private repository on github was created for group members to ease up working on the project simultaneously. Python 3 was adopted as an implantation language.
 
