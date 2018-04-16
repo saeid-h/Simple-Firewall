@@ -1,6 +1,6 @@
 # Advanced Algorithm Design
 ## Simple Firewall
-->Saeid Hosseinpoor, Cyrus Liu, Dave<-
+*Saeid Hosseinpoor, Cyrus Liu, Dave*
 
 # Introduction
 
