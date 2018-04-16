@@ -54,7 +54,7 @@ def generateIP ():
 
 ruleFile = open('TestIP.csv', 'w')
 
-Rules = [['*.*.*.*', '*.*.*.*', 'Allow']]
+Rules = []
 for i in range(100):
 	p = random.randint(0,4)
 #	Action = 'Block' if p else 'Allow'
