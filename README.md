@@ -1,23 +1,32 @@
-
 # Advanced Algorithm Design
 ## Simple Firewall
+
 <center>Saeid Hosseinpoor, Cyrus Liu, Dave<Center>
+
 # Introduction
+
 ## Problem Statement
+
   The objective of this projects is design and implementation of a packet controller within a network traffic according to a set on given rules. The rules are provided in a rule file and specify whether a node and/or a sub network could pass a TCP/UDP request he other node or subnetwork. The rule format is:
-<Center>srcIP(s), destIP(s), Act<Center>
+
+  <Center>srcIP(s), destIP(s), Act<Center>
   Where srcIP(s) is a single IP or a range of IPs which is sent the request, destIP(s)  is a single IP or a range of IPs which accepts the request, and Act is the action should be applied which is Allow or Block.
   We need to design the algorithm such that be able to check the redundant rules, and for the coming package, our algorithm should check the IP and return the action for the IP pairs according our rules file. Some rules may apply to a pair of source and destination IPs, if they imply the same action, it is safe to pick one of them. The problem rises when we have different action for a single pair of IPs. For this situation, we look at the assigned priority to each rule and pick the most important rule.
+
 # Assumptions
-IPs are defined in standard formats of a.b.c.d which a-d are integer numbers between 0 and 255. Range of IPs described in standard form of a.b.c.* or a.b.c.d/e or similar standard forms. There is no guaranty of consistency in rules or avoiding redundancies. Since, we assume rules are added to the list with no consideration, we make another assumption that most recent rules have higher priority to apply. For sake of clarity, we assume that new rules added to the end of the available
-rule file. The rules on the top of the file, are older than rules in the bottom of the file.
-A private repository on github was created for group members to ease up working on the project simultaneously. Python 3 was adopted as an implantation language.
+
+  IPs are defined in standard formats of a.b.c.d which a-d are integer numbers between 0 and 255. Range of IPs described in standard form of a.b.c.* or a.b.c.d/e or similar standard forms. There is no guaranty of consistency in rules or avoiding redundancies. Since, we assume rules are added to the list with no consideration, we make another assumption that most recent rules have higher priority to apply. For sake of clarity, we assume that new rules added to the end of the available rule file. The rules on the top of the file, are older than rules in the bottom of the file.
+  A private repository on github was created for group members to ease up working on the project simultaneously. Python 3 was adopted as an implantation language.
+
 # Design
-First of all, we need a data structure that is capable to fast store and access of IP addresses and range of the IP addresses. In order to define such data structure, we need to define an unique and useful form of IP addresses and ranges that could be easier to store or recover. 
+
+  First of all, we need a data structure that is capable to fast store and access of IP addresses and range of the IP addresses. In order to define such data structure, we need to define an unique and useful form of IP addresses and ranges that could be easier to store or recover. 
+
 ## IP Translation
-We know that an IP address is in form of d.d.d.d which d is an integer number between 0 and 255. Therefore we can translate each integer number into a 8-bit binary number. According to this mapping function we have a string of 32 bit of 0s and 1s.
-<Center>IP → “d1 …  d32“   di ∈ {0,1}<Center>
-For the range of IPs, we can use * as a wild char define whatever after fixed bits:
+
+  We know that an IP address is in form of d.d.d.d which d is an integer number between 0 and 255. Therefore we can translate each integer number into a 8-bit binary number. According to this mapping function we have a string of 32 bit of 0s and 1s.
+   <Center>IP → “d1 …  d32“   di ∈ {0,1}<Center>
+   For the range of IPs, we can use * as a wild char define whatever after fixed bits:
 <Center>IP-Range → “d1 …  dk*”   di ∈ {0,1}<Center>
 ## Data Structure
 Inspiring by the hierarchy concept of IP addresses we define a binary search tree to store the IP address and ranges. The translation of the IP address and range into an IPString, helps us to define this  binary tree, such that the left child of a node is the next 0 after current node, and the right child is the next 1 after current node.
