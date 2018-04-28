@@ -3,11 +3,14 @@
 
 class IPTree():
     def __init__(self, rootid="*"):
+        self.parent = None
         self.left = None
         self.right = None
         self.rootid = rootid
         self.rules = []
 
+    def getParent(self):
+        return self.parent
     def getLeftChild(self):
         return self.left
     def getRightChild(self):
@@ -43,6 +46,7 @@ class IPTree():
                         self.left = IPTree(nid+"0")
                     else:
                         self.left = IPTree(nid+"0*")
+                self.left.parent = self
                 self.left.insert(newRule)
             else:
                 if self.right == None:
@@ -50,6 +54,7 @@ class IPTree():
                         self.right = IPTree(nid+"1")
                     else:
                         self.right = IPTree(nid+"1*")
+                self.right.parent = self
                 self.right.insert(newRule)
 
 
