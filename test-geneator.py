@@ -25,10 +25,10 @@ t = [generateIP(), generateIP()]
 Traffics.append(t)
 for i in range(1000):
 	p = random.randint(1,10)
-	if p < 3:
+	if p < 4:
 		i = random.randint(0,len(Traffic)-1)
 		t = Traffic[i]
-	elif p < 8:
+	elif p < 9:
 		t = Traffic[-1]
 	else:
 		t = [generateIP(), generateIP()]
