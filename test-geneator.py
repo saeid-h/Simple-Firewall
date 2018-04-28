@@ -1,5 +1,5 @@
 
-#!/usr/bin/env python
+#!/usr/bin/python
 
 
 import csv
@@ -26,7 +26,7 @@ Traffics.append(t)
 for i in range(1000):
 	p = random.randint(1,10)
 	if p < 4:
-		j = random.randint(0,len(Traffic)-1)
+		j = random.randint(0,len(Traffics)-1)
 		t = Traffics[j]
 	elif p < 9:
 		t = Traffics[-1]

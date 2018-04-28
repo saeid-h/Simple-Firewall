@@ -1,3 +1,4 @@
+#!/usr/bin/python
 
 def ipTranslation (ip):
 	[a, b, c, d] = ip.split(".")

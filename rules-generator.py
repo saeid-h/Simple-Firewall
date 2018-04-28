@@ -14,7 +14,7 @@ def generateIP ():
 		b = str(random.randint(0,255))
 		c = str(random.randint(0,255))
 		d = str(random.randint(0,255))
-		e = str(4*random.randint(1,6))
+		e = str(random.randint(1,24))
 	else:
 		e = 0
 		p = random.randint(0,50)
@@ -25,20 +25,20 @@ def generateIP ():
 			d = '*'
 		else:
 			a = str(random.randint(1,255))
-			p = random.randint(0,30)
+			p = random.randint(0,10)
 			if not p:
 				b = '*'
 				c = '*'
 				d = '*'
 			else:
 				b = str(random.randint(0,255))
-				p = random.randint(0,20)
+				p = random.randint(0,5)
 				if not p:
 					c = '*'
 					d = '*'
 				else:
 					c = str(random.randint(0,255))
-					p = random.randint(0,10)
+					p = random.randint(0,2)
 					if not p:
 						d = '*'
 					else:
@@ -55,7 +55,7 @@ def generateIP ():
 ruleFile = open('Rules.csv', 'w')
 
 Rules = [['*.*.*.*', '*.*.*.*', 'Allow']]
-for i in range(100):
+for i in range(999):
 	p = random.randint(0,4)
 	Action = 'Block' if p else 'Allow'
 	Rules.append([generateIP(), generateIP(), Action])
