@@ -21,7 +21,7 @@ def generateTrafficIP ():
 trafficFile = open('TestIP.csv', 'w')
 
 Traffics = []
-t = [generateIP(), generateIP()]
+t = [generateTrafficIP(), generateTrafficIP()]
 Traffics.append(t)
 for i in range(1000):
 	p = random.randint(1,10)
@@ -31,7 +31,7 @@ for i in range(1000):
 	elif p < 9:
 		t = Traffic[-1]
 	else:
-		t = [generateIP(), generateIP()]
+		t = [generateTrafficIP(), generateTrafficIP()]
 	Traffics.append(t)
 
 print (Traffics)
