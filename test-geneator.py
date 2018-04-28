@@ -26,8 +26,8 @@ Traffics.append(t)
 for i in range(1000):
 	p = random.randint(1,10)
 	if p < 4:
-		i = random.randint(0,len(Traffic)-1)
-		t = Traffic[i]
+		j = random.randint(0,len(Traffic)-1)
+		t = Traffic[j]
 	elif p < 9:
 		t = Traffic[-1]
 	else:
