@@ -27,9 +27,9 @@ for i in range(1000):
 	p = random.randint(1,10)
 	if p < 4:
 		j = random.randint(0,len(Traffic)-1)
-		t = Traffic[j]
+		t = Traffics[j]
 	elif p < 9:
-		t = Traffic[-1]
+		t = Traffics[-1]
 	else:
 		t = [generateTrafficIP(), generateTrafficIP()]
 	Traffics.append(t)
