@@ -121,7 +121,6 @@ class RuleTree():
         dNode.rules.append(ruleNode)
 
 
-
     def getRule(self, sIP, dIP):
         currentNode = '*'
         currentRule = [0,1]
@@ -143,6 +142,41 @@ class RuleTree():
             s = s + 1
 
         return currentRule[1]
+
+    # def getRule(self, sIP, dIP):
+    #     currentNode = '*'
+    #     s = 0
+    #     ultimateNode = self.srcIP.findNode(sIP).rootid
+    #     srcRuleSet = set()
+
+    #     while currentNode != ultimateNode:
+    #         srcRuleSet = srcRuleSet | set(self.srcIP.findNode(currentNode).getRuleList())
+    #         if sIP[s] != '*':
+    #             currentNode =  sIP[:s+1] + '*'
+    #         s = s + 1
+
+    #     currentNode = '*'
+    #     s = 0
+    #     ultimateNode = self.dstIP.findNode(dIP).rootid
+    #     dstRuleSet = set()
+
+    #     while currentNode != ultimateNode:
+    #         dstRuleSet = dstRuleSet | set(self.dstIP.findNode(currentNode).getRuleList())
+    #         if dIP[s] != '*':
+    #             currentNode =  dIP[:s+1] + '*'
+    #         s = s + 1
+
+    #     intersectRuleList = list(srcRuleSet & dstRuleSet)
+
+    #     if len(intersectRuleList) == 0:
+    #         return 1
+    #     else:
+    #         currentRule = [0,1]
+    #         for i in range(len(intersectRuleList)):
+    #             if intersectRuleList[i].p > currentRule[0]:
+    #                 currentRule = [intersectRuleList[i].p, intersectRuleList[i].Action]
+    #         return currentRule[1]
+
 
     def printTree (self):
         self.srcIP.printTree()

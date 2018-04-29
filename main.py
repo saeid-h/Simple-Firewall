@@ -116,4 +116,7 @@ for i in range(len(Traffics)):
 	if max_time < (end_time - start_time):
 		max_time = (end_time - start_time)
 
-# print (max_time)
+	if rule[2] == 2:
+		print (rule)
+
+print (max_time)
