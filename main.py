@@ -2,6 +2,7 @@
 
 import csv
 import SimpleFirewallDataStructure as SF
+import time
 
 
 
@@ -85,6 +86,34 @@ Traffics = readTraffic ('TestIP.csv')
 Tree = SF.RuleTree()
 for i in range(len(Rules)):
 	Tree.insertRule(Rules[i])
+
+cacheList = list()
+chacheSize = 50
 # SF.printTree(sorceIP)
 
-Tree.printTree()
+# Tree.printTree()
+
+# print (Tree.srcIP.findNode('111000110001*').rootid)
+
+max_time = 0
+for i in range(len(Traffics)):
+	start_time = time.time()
+	if cacheList != []:
+		shortList = [cacheList[j] for j in range(len(cacheList)) \
+		if cacheList[j][0] == Traffics[i][0] and cacheList[j][1] == Traffics[i][1]]
+		if shortList == []:
+			rule = [Traffics[i][0], Traffics[i][1], Tree.getRule(Traffics[i][0], Traffics[i][1])]
+			if len(cacheList) >= chacheSize:
+				del cacheList[0]
+			cacheList.append(rule)
+		else:
+			rule = shortList[0]
+	else:
+		rule = [Traffics[i][0], Traffics[i][1], Tree.getRule(Traffics[i][0], Traffics[i][1])]
+		cacheList.append(rule)
+
+	end_time = time.time()
+	if max_time < (end_time - start_time):
+		max_time = (end_time - start_time)
+
+# print (max_time)

@@ -7,7 +7,7 @@ class IPTree():
         self.left = None
         self.right = None
         self.rootid = rootid
-        self.rules = []
+        self.rules = list()
 
     def getParent(self):
         return self.parent
@@ -18,18 +18,27 @@ class IPTree():
     def getRuleList(self):
         return self.rules
 
-    def findNode(self, srcIP):
-        if self.rootid == srcIP:
+    def findNode(self, IP):
+        if self.rootid == IP:
             return self
         else:
-            nid = self.rootid
-            if nid[-1] == "*":
-                nid = nid[:-1]
-            n = len(nid)
-            if srcIP[n:n+1] == "0":
-                return self.left
+            i = 0
+            while i < len(IP) and i < len(self.rootid) and self.rootid[i] == IP[i]:
+                i = i + 1
+            if i == len(IP):
+                return self
+
+            if IP[i] == '0':
+                if self.left != None:
+                    return self.left.findNode(IP)
+                else:
+                    return self
             else:
-                return self.right
+                if self.right != None:
+                    return self.right.findNode(IP)
+                else:
+                    return self
+
 
     def insertNode(self, IP):
         # srcIP = newRule[1]
@@ -66,9 +75,10 @@ class IPTree():
             self.left.printTree()
         L = self.getRuleList()
         if L != []:
-            print (self.rootid, ':')
+            # print (self.rootid, ':')
             for i  in range(len(L)):
-                print (L[i].p, L[i].Action)
+                print ('{0:3d} {1:32s} {2:32s} {3:1d}'.format \
+                    (L[i].p, L[i].srcIP.rootid, L[i].dstIP.rootid, L[i].Action))
         if self.right != None:
             self.right.printTree()
 
@@ -96,41 +106,43 @@ class RuleTree():
         dIP = newRule[2]
         sNode = self.srcIP.insertNode(sIP)
         dNode = self.dstIP.insertNode(dIP)
+
+        sCurrentRules = set(sNode.rules)
+        dCurrentRules = set(dNode.rules)
+        intersect = sCurrentRules & dCurrentRules 
+        if intersect:
+            if intersect.p > newRule[0]:
+                return
+        
         ruleNode = RuleNode([newRule[0], newRule[3]])
         ruleNode.srcIP = sNode
         ruleNode.dstIP = dNode
         sNode.rules.append(ruleNode)
         dNode.rules.append(ruleNode)
 
-        # if self.rootid == srcIP:
-        #     self.rules.append([newRule[0], newRule[2], newRule[3]])
-        # else:
-        #     nid = self.rootid
-        #     if nid[-1] == "*":
-        #         nid = nid[:-1]
-        #     n = len(nid)
-        #     if srcIP[n:n+1] == "0":
-        #         if self.left == None:
-        #             if n == 31:
-        #                 self.left = IPTree(nid+"0")
-        #             else:
-        #                 self.left = IPTree(nid+"0*")
-        #         self.left.parent = self
-        #         self.left.insert(newRule)
-        #     else:
-        #         if self.right == None:
-        #             if n == 31:
-        #                 self.right = IPTree(nid+"1")
-        #             else:
-        #                 self.right = IPTree(nid+"1*")
-        #         self.right.parent = self
-        #         self.right.insert(newRule)
 
-        # return None
 
     def getRule(self, sIP, dIP):
-        return None
+        currentNode = '*'
+        currentRule = [0,1]
+        s = 0
+        ultimateNode = self.srcIP.findNode(sIP).rootid
 
+        while currentNode != ultimateNode:
+
+            ruleList = self.srcIP.findNode(currentNode).getRuleList()
+            
+            if ruleList != []:
+                for i in range(len(ruleList)):
+                    if isInRange(dIP, ruleList[i].dstIP.rootid):
+                        if ruleList[i].p > currentRule[0]:
+                             currentRule = [ruleList[i].p, ruleList[i].Action]
+
+            if sIP[s] != '*':
+                currentNode =  sIP[:s+1] + '*'
+            s = s + 1
+
+        return currentRule[1]
 
     def printTree (self):
         self.srcIP.printTree()
@@ -163,6 +175,21 @@ def testTree():
 
     printTree(myIpTree)
 
+
+def isInRange(targetIP, rangeIP):
+    if len(targetIP) < len(rangeIP):
+        return False
+    if len(targetIP) == len(rangeIP):
+        (rangeIP == targetIP)
+    if rangeIP[-1] == '*':
+        for i in range(len(rangeIP)-1):
+            if rangeIP[i] != targetIP[i]:
+                return False
+        return True                
+    else:
+        return (rangeIP == targetIP)
+
+    
 
 
 # testTree()
