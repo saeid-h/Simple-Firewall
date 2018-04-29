@@ -122,10 +122,20 @@ class RuleTree():
 
 
     def getRule(self, sIP, dIP):
+        ultimateNodeSrc = self.srcIP.findNode(sIP).rootid
+        ultimateNodeDst = self.srcIP.findNode(dIP).rootid
+        if len(ultimateNodeSrc) < len(ultimateNodeDst):
+            IP1 = sIP
+            IP2 = dIP
+            ultimateNode = ultimateNodeSrc
+        else:
+            IP1 = dIP
+            IP2 = sIP
+            ultimateNode = ultimateNodeDst
         currentNode = '*'
         currentRule = [0,1]
         s = 0
-        ultimateNode = self.srcIP.findNode(sIP).rootid
+        # ultimateNode = self.srcIP.findNode(IP1).rootid
 
         while currentNode != ultimateNode:
 
@@ -133,12 +143,12 @@ class RuleTree():
             
             if ruleList != []:
                 for i in range(len(ruleList)):
-                    if isInRange(dIP, ruleList[i].dstIP.rootid):
+                    if isInRange(IP2, ruleList[i].dstIP.rootid):
                         if ruleList[i].p > currentRule[0]:
                              currentRule = [ruleList[i].p, ruleList[i].Action]
 
-            if sIP[s] != '*':
-                currentNode =  sIP[:s+1] + '*'
+            if IP1[s] != '*':
+                currentNode =  IP1[:s+1] + '*'
             s = s + 1
 
         return currentRule[1]
