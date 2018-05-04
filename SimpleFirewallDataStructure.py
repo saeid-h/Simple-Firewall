@@ -204,20 +204,20 @@ def printTree(tree):
 
 # test  tree
 
-def testTree():
-    rules = [[1, "*", "*", 1], \
-    [2, "1*", "111000101010110*", 0],
-    [3, "00111*", "111000101010110*", 0],
-    [4, "1001*", "111000010110*", 1],
-    [5, "0011*", "1110011110110*", 0],
-    [6, "0011*", "1110001110*", 0]]
+# def testTree():
+#     rules = [[1, "*", "*", 1], \
+#     [2, "1*", "111000101010110*", 0],
+#     [3, "00111*", "111000101010110*", 0],
+#     [4, "1001*", "111000010110*", 1],
+#     [5, "0011*", "1110011110110*", 0],
+#     [6, "0011*", "1110001110*", 0]]
 
 
-    myIpTree = IPTree()    
-    for i in range(len(rules)):
-        myIpTree.insert(rules[i])
+#     myIpTree = IPTree()    
+#     for i in range(len(rules)):
+#         myIpTree.insert(rules[i])
 
-    printTree(myIpTree)
+#     printTree(myIpTree)
 
 
 def isInRange(targetIP, rangeIP):
@@ -234,6 +234,46 @@ def isInRange(targetIP, rangeIP):
         return (rangeIP == targetIP)
 
     
+
+def detectConflict(rule1, rule2):
+    IPs1 = rule1[1]
+    IPd1 = rule1[2]
+    IPs2 = rule2[1]
+    IPd2 = rule2[2]
+
+    Cs1 = isInRange(IPs1, IPs2)
+    Cs2 = isInRange(IPs2, IPs1)
+    Cd1 = isInRange(IPd1, IPd2)
+    Cd2 = isInRange(IPd2, IPd1)
+    Cd = Cd1 or Cd2
+    isRedundant = (IPs1 == IPs2 and IPd1 == IPd2)
+    hasSamePriority = (rule1[0] == rule2[0])
+    hasNoConflict = (rule1[3] == rule2[3])
+
+    result = ['', '', '']
+    if isRedundant:
+        result[0] = 'Redundant'
+    else:
+        result[0] = 'Coverage'
+    if hasNoConflict:
+        result[1] = 'No Conflict'
+    else:
+        result[1] = 'Conflict'
+    if hasSamePriority:
+        result[2] = 'Same Prioratity'
+    elif rule1[0] > rule2[0]:
+        result[2] = '1'
+    else:
+        result[2] = '2'
+
+
+    if (Cs1 & Cd) or (Cs2 & Cd):
+        return result
+    else:
+        return ['No Coverage', 'No Conflict', '']
+        
+
+
 
 
 # testTree()

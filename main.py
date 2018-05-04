@@ -120,3 +120,8 @@ for i in range(len(Traffics)):
 		print (rule)
 
 print (max_time)
+
+
+rule1 = [30, '1*', '1*', 'Allow']
+rule2 = [32, '10010*', '100*', 'Block']
+print (SF.detectConflict(rule1,rule2))
