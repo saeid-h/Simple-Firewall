@@ -1,5 +1,6 @@
 
 #!/usr/bin/python
+from copy import deepcopy
 
 class IPTree():
     def __init__(self, rootid="*"):
@@ -110,8 +111,9 @@ class RuleTree():
         sCurrentRules = set(sNode.rules)
         dCurrentRules = set(dNode.rules)
         intersect = sCurrentRules & dCurrentRules 
+
         if intersect:
-            if intersect.p > newRule[0]:
+            if list(intersect)[0].p > newRule[0]:
                 return
         
         ruleNode = RuleNode([newRule[0], newRule[3]])
@@ -202,23 +204,6 @@ def printTree(tree):
         print(tree.rootid, tree.getRuleList())
         printTree(tree.getRightChild())
 
-# test  tree
-
-# def testTree():
-#     rules = [[1, "*", "*", 1], \
-#     [2, "1*", "111000101010110*", 0],
-#     [3, "00111*", "111000101010110*", 0],
-#     [4, "1001*", "111000010110*", 1],
-#     [5, "0011*", "1110011110110*", 0],
-#     [6, "0011*", "1110001110*", 0]]
-
-
-#     myIpTree = IPTree()    
-#     for i in range(len(rules)):
-#         myIpTree.insert(rules[i])
-
-#     printTree(myIpTree)
-
 
 def isInRange(targetIP, rangeIP):
     if len(targetIP) < len(rangeIP):
@@ -274,6 +259,73 @@ def detectConflict(rule1, rule2):
         
 
 
+def splitRules (oldRules):
+
+    i = 0
+    newRules = deepcopy (oldRules)
+
+    while i < len(newRules):
+        j = i + 1
+        while j < len(newRules):
+
+            result = detectConflict(newRules[i],newRules[j])
+
+            if result[0] == 'No Coverage':
+                j = j + 1
+            elif result[0] == 'Redundant':
+                if result[1] == 'No Conflict':
+                    del newRules[j]
+                elif newRules[i][0] > newRules[j][0]:
+                    del newRules[j]
+                else:
+                    del newRules[i]
+                    j = len(newRules)
+                    i = i - 1
+            else:
+                if newRules[i][1] == newRules[j][1]:
+                    if len(newRules[i][2]) < len(newRules[i][2]):
+                        r1 = newRules[i]
+                        r2 = newRules[i]
+                        if len(r1[2]) < 32:
+                            r1[2] = r1[2][:-1]+'0*'
+                            r2[2] = r2[2][:-1]+'1*'
+                            newRules.append(r1)
+                            newRules.append(r2)
+                        del newRules[i]
+                        j = len(newRules)
+                        i = i - 1
+                    else:
+                        r1 = newRules[j]
+                        r2 = newRules[j]
+                        if len(r1[2]) < 32:
+                            r1[2] = r1[2][:-1]+'0*'
+                            r2[2] = r2[2][:-1]+'1*'
+                            newRules.append(r1)
+                            newRules.append(r2)
+                        del newRules[j]
+                else:
+                    if len(newRules[i][1]) < len(newRules[i][1]):
+                        r1 = newRules[i]
+                        r2 = newRules[i]
+                        if len(r1[2]) < 32:
+                            r1[2] = r1[2][:-1]+'0*'
+                            r2[2] = r2[2][:-1]+'1*'
+                            newRules.append(r1)
+                            newRules.append(r2)
+                        del newRules[i]
+                        j = len(newRules)
+                        i = i - 1
+                    else:
+                        r1 = newRules[j]
+                        r2 = newRules[j]
+                        if len(r1[2]) < 32:
+                            r1[2] = r1[2][:-1]+'0*'
+                            r2[2] = r2[2][:-1]+'1*'
+                            newRules.append(r1)
+                            newRules.append(r2)
+                        del newRules[j]
+
+        i = i + 1
 
 
-# testTree()
+    return newRules

@@ -51,7 +51,7 @@ def readRules (filename):
 	with open(filename, newline='') as ruleFile:
 		spamreader = csv.reader(ruleFile)
 		for row in spamreader:
-			if row[2] == 'Allow':
+			if row[2] == 'Allow' or row[2] == 'ALLOW':
 				A = 1
 			else:
 				A = 0
@@ -79,13 +79,17 @@ def readTraffic (filename):
 # main
 
 # Read reuls and traffics from file
-Rules = readRules ('Rules.csv')
+# Rules = readRules ('Rules.csv')
+RuleSetA = readRules ('RuleSetA.txt')
+RuleSetB = readRules ('RuleSetB.txt')
+RuleSetC = readRules ('RuleSetA.txt')
 Traffics = readTraffic ('TestIP.csv')
 
+RuleSetC = SF.splitRules (RuleSetC)
 
 Tree = SF.RuleTree()
-for i in range(len(Rules)):
-	Tree.insertRule(Rules[i])
+for i in range(len(RuleSetC)):
+	Tree.insertRule(RuleSetC[i])
 
 cacheList = list()
 chacheSize = 50
@@ -121,7 +125,49 @@ for i in range(len(Traffics)):
 
 print (max_time)
 
+# Check if there is a redundancy in reul set A
+c = 0
+for i in range(len(RuleSetA)):
+	for j in range(i+1,len(RuleSetA)):
+		result = SF.detectConflict(RuleSetA[i],RuleSetA[j])
+		if result[0] == 'Redundant' and result[1] == 'No Conflict':
+			# print (RuleSetA[i],RuleSetA[j])
+			c = c + 1
+print (c)
 
-rule1 = [30, '1*', '1*', 'Allow']
-rule2 = [32, '10010*', '100*', 'Block']
-print (SF.detectConflict(rule1,rule2))
+# Check if there is some rules is set A and B that behaves differently
+c = 0
+for i in range(len(RuleSetA)):
+	for j in range(len(RuleSetB)):
+		result = SF.detectConflict(RuleSetA[i],RuleSetB[j])
+		if result[0] != 'No Coverage' and result[1] == 'Conflict':
+			# print (RuleSetA[i],RuleSetA[j])
+			c = c + 1
+print (c)
+
+
+c = 0
+for i in range(len(RuleSetA)):
+	for j in range(len(RuleSetB)):
+		result = SF.detectConflict(RuleSetA[i],RuleSetB[j])
+		if result[0] == 'Redundant' and result[1] == 'Conflict':
+			# print (RuleSetA[i],RuleSetA[j])
+			c = c + 1
+print (c)
+
+
+# rule1 = [30, '1*', '1*', 'Allow']
+# rule2 = [32, '10010*', '100*', 'Block']
+# print (SF.detectConflict(rule1,rule2))
+
+
+c = 0
+for i in range(len(RuleSetC)):
+	for j in range(i+1,len(RuleSetC)):
+		result = SF.detectConflict(RuleSetC[i],RuleSetC[j])
+		if result[0] == 'Coverage':
+			# print (RuleSetC[i],RuleSetC[j])
+			c = c + 1
+print (c)
+
+
