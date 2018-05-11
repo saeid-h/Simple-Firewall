@@ -47,7 +47,7 @@ def ipTranslation (ip):
 # Read rule set from file
 def readRules (filename):
 	Rules = []
-	p = 1
+	p = 100000-1
 	with open(filename, newline='') as ruleFile:
 		spamreader = csv.reader(ruleFile)
 		for row in spamreader:
@@ -56,7 +56,7 @@ def readRules (filename):
 			else:
 				A = 0
 			Rules.append([p, ipTranslation(row[0]), ipTranslation(row[1]), A])
-			p = p + 1
+			p = p - 1
 
 	return Rules
 
@@ -80,23 +80,33 @@ def readTraffic (filename):
 
 # Read reuls and traffics from file
 # Rules = readRules ('Rules.csv')
-RuleSetA = readRules ('RuleSetA.txt')
-RuleSetB = readRules ('RuleSetB.txt')
-RuleSetC = readRules ('RuleSetA.txt')
+originalRuleSetA = readRules ('RuleSetA.txt')
+originalRuleSetB = readRules ('RuleSetB.txt')
+originalRuleSetC = readRules ('RuleSetA.txt')
 Traffics = readTraffic ('TestIP.csv')
 
-RuleSetC = SF.splitRules (RuleSetC)
+M = 100000
+# originalRuleSetA.append([M, '*', '*', 0])
+originalRuleSetB.append([M, '*', '*', 0])
+# originalRuleSetC.append([M, '*', '*', 0])
+
+# print ("start")
+RuleSetC = SF.splitRules (originalRuleSetC)
+# for i in range(len(RuleSetC)):
+# 	print (RuleSetC[i])
 
 Tree = SF.RuleTree()
+# Tree.insertRule([100000, '*', '*', 1])
 for i in range(len(RuleSetC)):
 	Tree.insertRule(RuleSetC[i])
+# for i in range(len(RuleSetC)):
+# 	Tree.insertRule(RuleSetC[i])
+# print ([RuleSetC[i] for i in range(len(RuleSetC)) if len(RuleSetC[i][1]) > 32 or len(RuleSetC[i][2]) > 32])
 
 cacheList = list()
 chacheSize = 50
-# SF.printTree(sorceIP)
 
 # Tree.printTree()
-
 # print (Tree.srcIP.findNode('111000110001*').rootid)
 
 max_time = 0
@@ -120,45 +130,44 @@ for i in range(len(Traffics)):
 	if max_time < (end_time - start_time):
 		max_time = (end_time - start_time)
 
-	if rule[2] == 2:
-		print (rule)
+	# if rule[2] == 2:
+	# 	print (rule)
 
-print (max_time)
+print ("The maximum time to find a rule for pairs of IP is:", max_time, "sec")
 
 # Check if there is a redundancy in reul set A
 c = 0
-for i in range(len(RuleSetA)):
-	for j in range(i+1,len(RuleSetA)):
-		result = SF.detectConflict(RuleSetA[i],RuleSetA[j])
+for i in range(len(originalRuleSetA)):
+	for j in range(i+1,len(originalRuleSetA)):
+		result = SF.detectConflict(originalRuleSetA[i],originalRuleSetA[j])
 		if result[0] == 'Redundant' and result[1] == 'No Conflict':
-			# print (RuleSetA[i],RuleSetA[j])
+			# print (M-originalRuleSetA[i][0],M-originalRuleSetA[j][0])
+			# print (originalRuleSetA[i],originalRuleSetA[j])
 			c = c + 1
-print (c)
+print ("Number of redundant rules in RuleSetA:", c)
 
 # Check if there is some rules is set A and B that behaves differently
-c = 0
-for i in range(len(RuleSetA)):
-	for j in range(len(RuleSetB)):
-		result = SF.detectConflict(RuleSetA[i],RuleSetB[j])
-		if result[0] != 'No Coverage' and result[1] == 'Conflict':
-			# print (RuleSetA[i],RuleSetA[j])
-			c = c + 1
-print (c)
+# c = 0
+# for i in range(len(originalRuleSetA)):
+# 	for j in range(len(originalRuleSetB)):
+# 		result = SF.detectConflict(originalRuleSetA[i],originalRuleSetB[j])
+# 		if result[0] != 'No Coverage' and result[1] == 'Conflict':
+# 			if (len(originalRuleSetA[i][1]) == 32 and len(originalRuleSetA[i][2]) == 32) or \
+# 			(len(originalRuleSetB[j][1]) == 32 and len(originalRuleSetB[j][2]) == 32) and \
+# 			originalRuleSetA[i][3] == 1:
+# 				# print (RuleSetA[i],RuleSetB[j])
+# 				c = c + 1
+# print ("Partially or totally conflicted rules in RuleSetA and RuleSetB: ", c)
 
 
 c = 0
-for i in range(len(RuleSetA)):
-	for j in range(len(RuleSetB)):
-		result = SF.detectConflict(RuleSetA[i],RuleSetB[j])
+for i in range(len(originalRuleSetA)):
+	for j in range(len(originalRuleSetB)):
+		result = SF.detectConflict(originalRuleSetA[i],originalRuleSetB[j])
 		if result[0] == 'Redundant' and result[1] == 'Conflict':
-			# print (RuleSetA[i],RuleSetA[j])
+			# print (originalRuleSetA[i],originalRuleSetA[j])
 			c = c + 1
-print (c)
-
-
-# rule1 = [30, '1*', '1*', 'Allow']
-# rule2 = [32, '10010*', '100*', 'Block']
-# print (SF.detectConflict(rule1,rule2))
+print ("Redundant and conflicted rules in RuleSetA and RuleSetB: ",c)
 
 
 c = 0
@@ -168,6 +177,65 @@ for i in range(len(RuleSetC)):
 		if result[0] == 'Coverage':
 			# print (RuleSetC[i],RuleSetC[j])
 			c = c + 1
-print (c)
+print ("Partially or totally covered rules in RuleSetA: ",c)
 
 
+c = 0
+for i in range(len(originalRuleSetA)):
+	for j in range(len(RuleSetC)):
+		result = SF.detectConflict(originalRuleSetA[i],RuleSetC[j])
+		if result[0] == 'Redundant' and result[1] == 'Conflict':
+			# print (RuleSetA[i],RuleSetC[j])
+			c = c + 1
+print ("Redundant and conflicted rules in RuleSetA after breaking down: ", c)
+
+# print ([RuleSetC[i] for i in range(len(RuleSetC)) if len(RuleSetC[i][1]) < 3 or len(RuleSetC[i][2]) < 3])
+
+
+RuleSetA = SF.splitRules (originalRuleSetA)
+RuleSetB = SF.splitRules (originalRuleSetB)
+
+# print (len(RuleSetA))
+# print (len(RuleSetB))
+
+TreeA = SF.RuleTree()
+# TreeA.insertRule([100000, '*', '*', 1])
+for i in range(len(RuleSetA)):
+	TreeA.insertRule(RuleSetA[i])
+
+# TreeA.printTree()
+
+TreeB = SF.RuleTree()
+# TreeB.insertRule([100000, '*', '*', 1])
+for i in range(len(RuleSetB)):
+	TreeB.insertRule(RuleSetB[i])
+
+# TreeB.printTree()
+
+# Check if there is some rules is set A and B that behaves differently
+c = 0
+for i in range(len(RuleSetA)):
+	for j in range(len(RuleSetB)):
+		result = SF.detectConflict(RuleSetA[i],RuleSetB[j])
+		if result[0] != 'No Coverage' and result[1] == 'Conflict':
+			# print (M-RuleSetA[i][0], M-RuleSetB[j][0])
+			c = c + 1
+if c == 0:
+	print ("RuleSetA and RuleSetB are equivalant.")
+else:
+	print ("RuleSetA and RuleSetB are not equivalant. There are", c, "Conflict.")
+
+# Traffics.append([ipTranslation('1.1.1.1'), ipTranslation('1.1.1.1')])
+# # print(Traffics)
+# c = 0
+# for i in range(len(Traffics)):
+# 	rA = TreeA.getRule(Traffics[i][0], Traffics[i][1])
+# 	rB = TreeB.getRule(Traffics[i][0], Traffics[i][1])
+# 	print (rA, rB)
+# 	if rA != rB:
+# 		print (Traffics[i])
+# 		c = c + 1
+# print ("Conflicted traffic nemubers:", c)		
+			
+# TreeA.printTree()
+# TreeB.printTree()
