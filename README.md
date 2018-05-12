@@ -8,7 +8,9 @@
   <p>The objective of this projects is design and implementation of a packet controller within a network traffic according to a set on given rules. The rules are provided in a rule file and specify whether a node and/or a sub network could pass a TCP/UDP request he other node or subnetwork. The rule format is:</p>
   <Center>srcIP(s), destIP(s), Act<Center>
 
-  Where srcIP(s) is a single IP or a range of IPs which is sent the request, destIP(s)  is a single IP or a range of IPs which accepts the request, and Act is the action should be applied which is Allow or Block.
+  Where srcIP(s) is a single IP or a range of IPs which is sent the request, destIP(s)  is a single IP or a range of IPs which accepts the request, and Act is the action should be applied which is Allow or Block. We summary our project in two focuses showed in Fig 1.1. decision making for the coming packet a rules sets update, which means we check the different rules sets we have, find out the redundant and equivalent rules between different rules sets, then update the result to our own rules sets.
+  ![alt text](https://github.com/saiedhp/Simple-Firewall/blob/master/img/project-focus.jpg "Logo Title Text 1")
+
 
   We need to design the algorithm such that be able to check the redundant rules, and for the coming package, our algorithm should check the IP and return the action for the IP pairs according our rules file. Some rules may apply to a pair of source and destination IPs, if they imply the same action, it is safe to pick one of them. The problem rises when we have different action for a single pair of IPs. For this situation, we look at the assigned priority to each rule and pick the most important rule.
 
@@ -21,7 +23,7 @@
 
 # Design
 
-  First of all, we need a data structure that is capable to fast store and access of IP addresses and range of the IP addresses. In order to define such data structure, we need to define an unique and useful form of IP addresses and ranges that could be easier to store or recover. 
+  First of all, we need a data structure that is capable to fast store and access of IP addresses and range of the IP addresses. In order to define such data structure, we need to define an unique and useful form of IP addresses and ranges that could be easier to store or recover.
 
 ## IP Translation
 
@@ -47,8 +49,8 @@
 
 ## Insertion
 
-  After IP translation we start from root and traverse the tree to find the source IP(s)’s position in the tree. If the children are available we go through the nodes until get the target node, then insert the rule into a table or link list of the rules. In such case that children are not available we make new child in proper position and open a new list or table of rules in the final node. 
-We investigated to consider two tree for source and destination IPs, but analysis shows that it doesn’t improve the performance. 
+  After IP translation we start from root and traverse the tree to find the source IP(s)’s position in the tree. If the children are available we go through the nodes until get the target node, then insert the rule into a table or link list of the rules. In such case that children are not available we make new child in proper position and open a new list or table of rules in the final node.
+We investigated to consider two tree for source and destination IPs, but analysis shows that it doesn’t improve the performance.
 
 ## Search
 
@@ -67,11 +69,11 @@ We investigated to consider two tree for source and destination IPs, but analysi
 
   The time complexity of creation of the data list is O(n), because we need to add, insert each n rules in the data structure in constant time. However the complexity for search and reaching the node related to the source IP is O(1). In the worst case that all the rules are related to the source IP, we need two comparison for destination IP and rule’s priority to verify the relevance of the rules. The maximum number is O(n).
 
-  For a request that took place most recently, we just have constant time O(1) operation to find it within the most recent list and apply it again. 
+  For a request that took place most recently, we just have constant time O(1) operation to find it within the most recent list and apply it again.
 
 ## Space Complexity
 
-  In the worst case, we need O(log n) nodes to store data where n is the total number of the rules (proof is available). Each rule needs a unit space to store, in worst case that rules are unique and there is no redundancy or conflict in rule set. Therefore the total space required is O(n+log n) which is O(n). 
+  In the worst case, we need O(log n) nodes to store data where n is the total number of the rules (proof is available). Each rule needs a unit space to store, in worst case that rules are unique and there is no redundancy or conflict in rule set. Therefore the total space required is O(n+log n) which is O(n).
 
 # Optimization
 
