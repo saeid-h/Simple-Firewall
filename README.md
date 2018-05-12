@@ -38,7 +38,7 @@ i
 <Center>IP-Range → “d1 …  dk*”   di ∈ {0,1}<Center>
 
 ## 2.2 Data Structure
-
+i
   Inspiring by the hierarchy concept of IP addresses we define a binary search tree to store the IP address and ranges. The translation of the IP address and range into an IPString, helps us to define this  binary tree, such that the left child of a node is the next 0 after current node, and the right child is the next 1 after current node.
 
   We store our source IP and destination IP into two different binary trees, then connect them with rules table showed in Fig 2.2, when the coming packet checked by our rules sets,  we search the IP we get the rules result at the same time, then we check the destination IP tree, we also get the action result, then we choose the higher priority one applying the rule to this packet.
@@ -47,7 +47,7 @@ i
 
   Let’s consider the root of the tree be “*” which is range of all IPs (*.*.*.*), the left child of root represent “0*” and the right child is “1*” and so on. In other words if we have a node of  “d1 …  dk*”, the left child of this node is “d1 …  dk0*”, and the right child is “1d1 …  dk1*”. Fig.2.3. shows how we construct the IP tree. It is obvious that the parent of this node would be “d1 …  dk-1*”. As a result of this definition, leaves are single IP address and intermediates nodes are IP ranges.
   ![alt text](https://github.com/saiedhp/Simple-Firewall/blob/master/img/IPTree.jpg "IP tree")
-  Figure 2.3. Basic Binary Tree for IP Storage
+         Figure 2.3. Basic Binary Tree for IP Storage
 
   The maximum height of this tree is 32 which is the maximum length of the IPString. Access to the nodes in the worst case is 32 operation which is O(1), in Fig 2.4. we show an example of a specific rule stored in our data structure.
   ![alt text](https://github.com/saiedhp/Simple-Firewall/blob/master/img/rules_tree_example.png "rules tree instance")
