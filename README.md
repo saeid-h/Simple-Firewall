@@ -9,8 +9,8 @@
   <Center>srcIP(s), destIP(s), Act<Center>
 
   Where srcIP(s) is a single IP or a range of IPs which is sent the request, destIP(s)  is a single IP or a range of IPs which accepts the request, and Act is the action should be applied which is Allow or Block. We summary our project in two focuses showed in Fig 1.1. decision making for the coming packet a rules sets update, which means we check the different rules sets we have, find out the redundant and equivalent rules between different rules sets, then update the result to our own rules sets.
-  ![alt text](https://github.com/saiedhp/Simple-Firewall/blob/master/img/project-focus.jpg "Logo Title Text 1")
-
+  ![alt text](https://github.com/saiedhp/Simple-Firewall/blob/master/img/project-focus.jpg "two main tasks")
+  <center>Figure 1.1. Project Two Main Tasks</center>
 
   We need to design the algorithm such that be able to check the redundant rules, and for the coming package, our algorithm should check the IP and return the action for the IP pairs according our rules file. Some rules may apply to a pair of source and destination IPs, if they imply the same action, it is safe to pick one of them. The problem rises when we have different action for a single pair of IPs. For this situation, we look at the assigned priority to each rule and pick the most important rule.
 
