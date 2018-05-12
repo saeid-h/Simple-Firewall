@@ -28,7 +28,7 @@
   Figure 2.1. IP Rule Set Format
 
 ## 2.1 IP Translation
-
+i
   We know that an IP address is in form of d.d.d.d which d is an integer number between 0 and 255. Therefore we can translate each integer number into a 8-bit binary number. According to this mapping function we have a string of 32 bit of 0s and 1s.
 
    <Center>IP → “d1 …  d32“   di ∈ {0,1}<Center>
@@ -52,7 +52,7 @@
   The maximum height of this tree is 32 which is the maximum length of the IPString. Access to the nodes in the worst case is 32 operation which is O(1), in Fig 2.4. we show an example of a specific rule stored in our data structure.
   ![alt text](https://github.com/saiedhp/Simple-Firewall/blob/master/img/rules_tree_example.png "rules tree instance")
   Figure 2.4. Source IP and Destination IP Rules Linking
-
+i
 # 3 Implementation
 
   We need to implement different operations like insertion, search, match, and update in this project. More operations might be added if they are required during the development phase. For the coming packet checking part, as we showed in Fig 3.1. we first search the source IP and destination IP in the cahe rule list, if we don’t get the result, we get back to our whole rule sets stree, then we search the rules tree, apply the results to the coming packet.
