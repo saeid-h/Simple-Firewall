@@ -16,7 +16,7 @@ def ipTranslation (ip):
 		e = int(e)
 	else:
 		e = 0
-	
+
 	ipb = ""
 	if a == "*":
 		ipb = ipb + "*"
@@ -34,7 +34,7 @@ def ipTranslation (ip):
 					ipb = ipb + "*"
 				else:
 					ipb = ipb + '{0:08b}'.format(int(d))
-	
+
 	if e:
 		ipb = ipb[:-e] + "*"
 
@@ -147,6 +147,7 @@ for i in range(len(originalRuleSetA)):
 print ("Number of redundant rules in RuleSetA:", c)
 
 # Check if there is some rules is set A and B that behaves differently
+<<<<<<< Updated upstream
 # c = 0
 # for i in range(len(originalRuleSetA)):
 # 	for j in range(len(originalRuleSetB)):
@@ -158,6 +159,16 @@ print ("Number of redundant rules in RuleSetA:", c)
 # 				# print (RuleSetA[i],RuleSetB[j])
 # 				c = c + 1
 # print ("Partially or totally conflicted rules in RuleSetA and RuleSetB: ", c)
+=======
+c = 0
+for i in range(len(RuleSetA)):
+	for j in range(len(RuleSetB)):
+		result = SF.detectConflict(RuleSetA[i],RuleSetB[j])
+		if result[0] != 'No Coverage' and result[1] == 'Conflict':
+		#	print (RuleSetA[i],RuleSetB[j])
+			c = c + 1
+print (c)
+>>>>>>> Stashed changes
 
 
 c = 0
@@ -235,7 +246,7 @@ else:
 # 	if rA != rB:
 # 		print (Traffics[i])
 # 		c = c + 1
-# print ("Conflicted traffic nemubers:", c)		
-			
+# print ("Conflicted traffic nemubers:", c)
+
 # TreeA.printTree()
 # TreeB.printTree()
