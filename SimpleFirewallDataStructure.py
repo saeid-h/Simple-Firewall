@@ -1,5 +1,5 @@
 
-#!/usr/bin/python
+#!/usr/bin/python3
 from copy import deepcopy
 
 class IPTree():
@@ -155,6 +155,20 @@ class RuleTree():
 
         return currentRule[1]
 
+    
+
+    def getRuleOpt(self, sIP, dIP):
+        srcNode = self.srcIP.findNode(sIP)
+        dstNode = self.srcIP.findNode(dIP)
+        srcruleSet = set(srcNode.getRuleList())
+        dstruleSet = set(dstNode.getRuleList())
+        rule = list(srcruleSet & dstruleSet) 
+        print (sIP, srcNode.rootid, dIP, dstNode.rootid, rule)
+        return rule[0].Action
+
+
+
+
     # def getRule(self, sIP, dIP):
     #     currentNode = '*'
     #     s = 0
@@ -266,16 +280,17 @@ def splitRules (oldRules):
 
     while i < len(newRules):
         j = i + 1
-        while j < len(newRules):
 
+        while j < len(newRules):
+            # print (i, j)
+            # print (newRules[i],newRules[j])
             result = detectConflict(newRules[i],newRules[j])
 
             if result[0] == 'No Coverage':
                 j = j + 1
+
             elif result[0] == 'Redundant':
-                if result[1] == 'No Conflict':
-                    del newRules[j]
-                elif newRules[i][0] > newRules[j][0]:
+                if newRules[i][0] > newRules[j][0]:
                     del newRules[j]
                 else:
                     del newRules[i]
@@ -283,48 +298,67 @@ def splitRules (oldRules):
                     i = i - 1
             else:
                 if newRules[i][1] == newRules[j][1]:
-                    if len(newRules[i][2]) < len(newRules[i][2]):
+                    if len(newRules[i][2]) < len(newRules[j][2]):
                         r1 = newRules[i]
                         r2 = newRules[i]
-                        if len(r1[2]) < 32:
+                        del newRules[i]
+                        if len(r1[2]) < 31:
                             r1[2] = r1[2][:-1]+'0*'
                             r2[2] = r2[2][:-1]+'1*'
-                            newRules.append(r1)
-                            newRules.append(r2)
-                        del newRules[i]
+                        else:
+                            r1[2] = r1[2]+'0'
+                            r2[2] = r2[2]+'1'
+                            # print(1)
+                        newRules.append(r1)
+                        newRules.append(r2)
                         j = len(newRules)
                         i = i - 1
                     else:
                         r1 = newRules[j]
                         r2 = newRules[j]
-                        if len(r1[2]) < 32:
+                        del newRules[j]
+                        if len(r1[2]) < 31:
                             r1[2] = r1[2][:-1]+'0*'
                             r2[2] = r2[2][:-1]+'1*'
-                            newRules.append(r1)
-                            newRules.append(r2)
-                        del newRules[j]
+                        else:
+                            r1[2] = r1[2]+'0'
+                            r2[2] = r2[2]+'1'
+                            # print(2)
+                        newRules.append(r1)
+                        newRules.append(r2)
                 else:
-                    if len(newRules[i][1]) < len(newRules[i][1]):
+                    if len(newRules[i][1]) < len(newRules[j][1]):
                         r1 = newRules[i]
                         r2 = newRules[i]
-                        if len(r1[2]) < 32:
-                            r1[2] = r1[2][:-1]+'0*'
-                            r2[2] = r2[2][:-1]+'1*'
-                            newRules.append(r1)
-                            newRules.append(r2)
                         del newRules[i]
+                        if len(r1[1]) < 31:
+                            r1[1] = r1[1][:-1]+'0*'
+                            r2[1] = r2[1][:-1]+'1*'
+                        else:
+                            r1[1] = r1[1]+'0'
+                            r2[1] = r2[1]+'1'
+                            # print(3)
+                        newRules.append(r1)
+                        newRules.append(r2)
                         j = len(newRules)
                         i = i - 1
                     else:
                         r1 = newRules[j]
                         r2 = newRules[j]
-                        if len(r1[2]) < 32:
-                            r1[2] = r1[2][:-1]+'0*'
-                            r2[2] = r2[2][:-1]+'1*'
-                            newRules.append(r1)
-                            newRules.append(r2)
                         del newRules[j]
-
+                        if len(r1[1]) < 31:
+                            r1[1] = r1[1][:-1]+'0*'
+                            r2[1] = r2[1][:-1]+'1*'
+                            # newRules.append(r1)
+                            # newRules.append(r2)
+                        else:
+                            r1[1] = r1[1]+'0'
+                            r2[1] = r2[1]+'1'
+                            print (newRules[i], newRules[j])
+                            # print(4)
+                        newRules.append(r1)
+                        newRules.append(r2)
+                        
         i = i + 1
 
 

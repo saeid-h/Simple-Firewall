@@ -104,3 +104,4 @@ ENV/
 *.pdf
 *.doc
 *.docx
+.~*
