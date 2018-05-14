@@ -102,6 +102,7 @@ ENV/
 
 # Private Documents
 *.pdf
+img/
 *.doc
 *.docx
 .~*
